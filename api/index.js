@@ -12,4 +12,3 @@ app.listen(port, () => console.log(`O servidor está conectado na porta ${port}`
 
 module.exports = app
 
-//testando o versionamento do programa (vou commitar e depois vou voltar a versão)
