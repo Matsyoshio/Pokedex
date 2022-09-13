@@ -11,15 +11,13 @@ class PokeController {
         }
     }
     static async buscaPoke(req, res) {
-        const nome = req.query.name
-        const tipo = req.query.tipo
+        const nome = req.query.nome
+        
         try {
             const Pokes = await database.Pokemon.findAll( {
                 where: {
-                    [Op.or] : [
-                    {nome: nome},
-                    {tipo: tipo}
-                ]
+                    nome: nome
+           
                     }
             })
             return res.status(200).json(Pokes)
