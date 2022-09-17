@@ -83,7 +83,10 @@ class PokeController {
             }
             })
                 return res.status(200).json(PokeCompleto)
-}  
+}           
+                    }
+            })
+            return res.status(200).json(Pokes)
         } catch (error) {
             return res.status(500).json(error.message)
         }
