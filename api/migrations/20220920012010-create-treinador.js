@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Pokemons', {
+    await queryInterface.createTable('Treinadores', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,11 +11,8 @@ module.exports = {
       nome: {
         type: Sequelize.STRING
       },
-      tipo: {
-        type: Sequelize.STRING
-      },
-      capturado: {
-        type: Sequelize.BOOLEAN
+      insignias: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +25,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Pokemons');
+    await queryInterface.dropTable('Treinadores');
   }
 };

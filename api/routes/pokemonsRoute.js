@@ -6,8 +6,7 @@ const router = Router()
 
 router
     .post('/pokemons', PokeController.criaPoke)
-    .get('/pokemons/', PokeController.buscaPoke)
-    .get('/pokemons/buscaavancada/', PokeController.buscaCompleta)
+    .get('/pokemons/busca', PokeController.buscaCompleta)
     .get('/pokemons/todos', PokeController.todoPoke)
     .delete('/pokemons/:id', PokeController.apagaPoke)
     .put('/pokemons/:nomePoke', PokeController.atualizaPoke)
