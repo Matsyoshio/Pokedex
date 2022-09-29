@@ -5,7 +5,10 @@ class PokeController {
     static async criaPoke(req, res) {
         const novoPoke = req.body
         const capturado = req.body.capturado
-        const treinador = req.body.treinador_id
+        let treinador = req.body.treinador_id
+        if (treinador == undefined) {
+            treinador = null
+        }
         try {
             if ((capturado == 0 || capturado == undefined) && treinador != undefined) {
                 return res.status(200).json({message: "Pokémon não capturado não pode ter treinador"})    
@@ -31,8 +34,12 @@ class PokeController {
                     where: {
                         nome: nome,
                         [Op.or]: [{tipo1: tipo}, {tipo2: tipo}],
-                        capturado: capturado},
+                        capturado: capturado,
                         treinador_id: treinador
+                    }, include: [{
+                        model: database.Treinadores,
+                        required: true
+                    }]                         
                 }) 
                 return res.status(200).json(PokeCompleto)    
             } if (tipo === undefined && capturado === undefined && treinador === undefined) {                
