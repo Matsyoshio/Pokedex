@@ -1,4 +1,4 @@
-// const database = require('../models')
+const database = require('../models')
 const { Op } = require('sequelize')
 const { PokemonsServices } = require('../services')
 const pokemonsServices = new PokemonsServices()
@@ -110,7 +110,7 @@ class PokeController {
     static async apagaPoke(req, res) {
         const { id } = req.params
         try {
-            await database.Pokemons.destroy( { where: { id: Number(id) } } )
+            await pokemonsServices.apagaRegisto( {id: Number(id)} )
             return res.status(200).json({ mensagem: `Pókemon de ID ${id} deletado`})
         } catch (error) {
             return res.status(500).json(error.message)
@@ -122,7 +122,6 @@ class PokeController {
         try {
             const atualPoke = await pokemonsServices.atualizaRegistro(mudaPoke, {nome: nomePoke})
             return res.status(200).json(atualPoke)
-            // ajustar mensagem de retorno que nao funcionou
         } catch (error) {
             return res.status(500).json(error.message)
         }

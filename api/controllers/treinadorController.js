@@ -54,14 +54,8 @@ class TreinadorController {
     }
     static async apagaTreinador(req, res) {
         const { id } = req.params
-        try {
-            const pokemonSolto = await database.Pokemons.update({
-                capturado: 0,
-                treinador_id: null
-            }, { where:{
-                treinador_id: id}
-            })     
-            await database.Treinadores.destroy( { where: { id: Number(id) } } )
+        try {  
+            await treinadorServices.apagaRegisto( Number(id)  )
             return res.status(200).json({ mensagem: `Treinador de ID ${id} deletado; Pokémon(s) foi(ram) liberado(s)`})
         } catch (error) {
             return res.status(500).json(error.message)

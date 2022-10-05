@@ -7,8 +7,20 @@ class TreinadoresServices extends Services {
     }
     // métodos especificos do controlador de treinadores
         
-    async buscaGeral(local = {}){
-            return database[this.nomeDoModelo].findAll({ where: { ...local }})}
+    async buscaGeral(local){
+            return database[this.nomeDoModelo].findAll({ where: { ...local }})
+    }
+
+    async apagaRegisto(id){
+        await database.Pokemons.update({
+            capturado: 0,
+            treinador_id: null
+        }, { where:{
+            treinador_id: id}
+        })
+        await database[this.nomeDoModelo].destroy({ where: {id}})   
+    }
 }
+
 
 module.exports = TreinadoresServices

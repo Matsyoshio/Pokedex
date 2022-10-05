@@ -18,10 +18,6 @@ class Services {
         return database[this.nomeDoModelo].update(dadosAtualizados, { where: { ...where } })
 
     }
-
-    async apagaRegisto(id){
-
-    }
 }
 
 module.exports = Services

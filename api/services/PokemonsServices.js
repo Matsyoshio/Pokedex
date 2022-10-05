@@ -10,11 +10,17 @@ class PokemonsServices extends Services {
     }
     // métodos especificos do controlador de pokemons
         
-    async buscaGeral(local = {}){
-            return database[this.nomeDoModelo].findAll( { 
-                where: { ...local }, 
-                include: [{ model: database[this.treinadores], required: true }]
+    async buscaGeral(local, include){
+        return database[this.nomeDoModelo].findAll( { 
+            where: { ...local }, 
+            include: [{model: database.Treinadores}]
             })
+    }
+    
+    async apagaRegisto(local){
+        return database[this.nomeDoModelo].destroy( {
+            where: {...local}
+        })
     }
 }
 
