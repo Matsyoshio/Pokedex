@@ -1,10 +1,14 @@
 const database = require('../models')
+const { TreinadorServices } = require('../services')
+const treinadorServices = new TreinadorServices()
+
+
 
 class TreinadorController {
     static async criaTreinador(req, res) {
         const novoTreinador = req.body
         try {
-            const novoTreinadorCriado = await database.Treinadores.create(novoTreinador)
+            const novoTreinadorCriado = await treinadorServices.criaRegisto(novoTreinador)
             return res.status(200).json(novoTreinadorCriado)
         } catch (error) {
             return res.status(500).json(error.message)
@@ -17,25 +21,22 @@ class TreinadorController {
         try {
             // busca com todos os itens
             if (nome != undefined && insignias != undefined) {
-                const busca = await database.Treinadores.findAll( {
-                    where: {
+                const busca = await treinadorServices.buscaGeral( 
+                    {
                         nome: nome,
                         insignias: insignias}
-                }) 
+                ) 
                 return res.status(200).json(busca)    
             } if (insignias === undefined) {                
-                const busca = await database.Treinadores.findAll( {
-                    where: { 
+                const busca = await treinadorServices.buscaGeral( {                    
                         nome: nome
                     }
-                }) 
+                ) 
                 return res.status(200).json(busca)
             } if (nome === undefined) {                
                 const busca = await database.Treinadores.findAll( {
-                    where: { 
                     insignias: insignias
-            }
-                })
+            })
                 return res.status(200).json(busca)
             }      
         } catch (error) {
@@ -44,7 +45,7 @@ class TreinadorController {
     }
     static async todoTreinador(req, res) {
         try {
-            const todosOsTreinadores = await database.Treinadores.findAll()
+            const todosOsTreinadores = await treinadorServices.pegaTodosOsRegistros()
             return res.status(200).json(todosOsTreinadores)
 
         } catch (error) {
@@ -70,7 +71,7 @@ class TreinadorController {
         const mudaTreinador = req.body
         const { id } = req.params
         try {
-            const atualTreinador = await database.Treinadores.update(mudaTreinador, { where: {id: Number(id)}})
+            const atualTreinador = await treinadorServices.atualizaRegistro(mudaTreinador, {id: Number(id)})
             return res.status(200).json(atualTreinador)
             // ajustar mensagem de retorno que nao funcionou
         } catch (error) {
