@@ -9,6 +9,6 @@ router
     .get('/pokemons/busca', PokeController.buscaCompleta)
     .get('/pokemons/todos', PokeController.todoPoke)
     .delete('/pokemons/:id', PokeController.apagaPoke)
-    .put('/pokemons/:nomePoke', PokeController.atualizaPoke)
+    .put('/pokemons/:id', PokeController.atualizaPoke)
 
 module.exports = router

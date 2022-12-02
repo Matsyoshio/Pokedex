@@ -1,6 +1,7 @@
 const database = require('../models')
 const { TreinadorServices } = require('../services')
 const treinadorServices = new TreinadorServices()
+const sequelize = require('sequelize')
 
 
 
@@ -34,7 +35,7 @@ class TreinadorController {
                 ) 
                 return res.status(200).json(busca)
             } if (nome === undefined) {                
-                const busca = await database.Treinadores.findAll( {
+                const busca = await treinadorServices.buscaGeral( {
                     insignias: insignias
             })
                 return res.status(200).json(busca)
@@ -46,6 +47,15 @@ class TreinadorController {
     static async todoTreinador(req, res) {
         try {
             const todosOsTreinadores = await treinadorServices.pegaTodosOsRegistros()
+            return res.status(200).json(todosOsTreinadores)
+
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+    static async todoTreinadorLiga(req, res) {
+        try {
+            const todosOsTreinadores = await treinadorServices.buscaLiga()
             return res.status(200).json(todosOsTreinadores)
 
         } catch (error) {
@@ -68,6 +78,24 @@ class TreinadorController {
             const atualTreinador = await treinadorServices.atualizaRegistro(mudaTreinador, {id: Number(id)})
             return res.status(200).json(atualTreinador)
             // ajustar mensagem de retorno que nao funcionou
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+    static async restauraTreinador(req, res){
+        const { id } = req.params
+        try {
+            await treinadorServices.restauraRegistro(Number(id))
+            return res.status(200).json({mensagem: `Treinador ${id} restaurado`})
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+    static async pegaPokeCapturado(req, res) {
+        const { idTreinador } = req.params
+        try {
+            const pokeCapturados = await treinadorServices.pokeCapturado(Number(idTreinador))
+            return res.status(200).json({pokeCapturados})
         } catch (error) {
             return res.status(500).json(error.message)
         }

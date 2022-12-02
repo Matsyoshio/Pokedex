@@ -118,9 +118,9 @@ class PokeController {
     }
     static async atualizaPoke(req, res) {
         const mudaPoke = req.body
-        const { nomePoke } = req.params
+        const { id } = req.params
         try {
-            const atualPoke = await pokemonsServices.atualizaRegistro(mudaPoke, {nome: nomePoke})
+            const atualPoke = await pokemonsServices.atualizaRegistro(mudaPoke, {id: Number(id)})
             return res.status(200).json(atualPoke)
         } catch (error) {
             return res.status(500).json(error.message)
