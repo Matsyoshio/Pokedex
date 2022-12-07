@@ -17,10 +17,29 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Pokemons.init({
-    nome: DataTypes.STRING,
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Colocar Nome ao Pokémon'},
+        notEmpty: {
+          args: true,
+          msg: 'Colocar Nome ao Pokémon'}
+      }},
     tipo1: DataTypes.STRING,
     tipo2: DataTypes.STRING,
-    capturado: DataTypes.BOOLEAN
+    capturado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Indicar se o Pokémon foi ou não capturado'
+        }
+      }  
+    }
   }, {
     sequelize,
     modelName: 'Pokemons',

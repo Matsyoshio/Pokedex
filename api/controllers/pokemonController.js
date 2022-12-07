@@ -1,5 +1,7 @@
 const database = require('../models')
 const { Op } = require('sequelize')
+const { PokemonsServices } = require('../services')
+const pokemonsServices = new PokemonsServices()
 
 class PokeController {
     static async criaPoke(req, res) {
@@ -15,7 +17,7 @@ class PokeController {
             } if (capturado == 1 && treinador == undefined) {
                 return res.status(200).json({message: "Pokémon capturado deve ter treinador"})    
             } else {
-                const novoPokeCriado = await database.Pokemons.create(novoPoke)
+                const novoPokeCriado = await pokemonsServices.criaRegisto(novoPoke)
                 return res.status(200).json(novoPokeCriado)}
         } catch (error) {
             return res.status(500).json(error.message)
@@ -30,90 +32,66 @@ class PokeController {
         try {
             // busca com todos os itens
             if (nome != undefined && tipo != undefined && capturado != undefined && treinador != undefined) {
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: {
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         nome: nome,
                         [Op.or]: [{tipo1: tipo}, {tipo2: tipo}],
                         capturado: capturado,
                         treinador_id: treinador
-                    }, include: [{
-                        model: database.Treinadores,
-                        required: true
-                    }]                         
-                }) 
+                    }) 
                 return res.status(200).json(PokeCompleto)    
             } if (tipo === undefined && capturado === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         nome: nome
-                    }, include: [{
-                        model: database.Treinadores,
-                        required: true
-                    }]
-                }) 
+                    }
+                ) 
                 return res.status(200).json(PokeCompleto)
             } if (nome === undefined && tipo === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                     capturado: capturado
-            }
                 })
                 return res.status(200).json(PokeCompleto)
             } if (nome === undefined && capturado === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         [Op.or]: [{tipo1: tipo}, {tipo2: tipo}]
-                }
                 })
                 return res.status(200).json(PokeCompleto)
             } if (nome === undefined && capturado === undefined && tipo === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         treinador_id: treinador
-                }
                 })
                 return res.status(200).json(PokeCompleto)
             } if (tipo === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         nome: nome,
                         capturado: capturado
-                    }
                 })
                 return res.status(200).json(PokeCompleto)  
             } if (capturado === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                         nome: nome,
                         [Op.or]: [{tipo1: tipo}, {tipo2: tipo}]
-                    }
                 })
                 return res.status(200).json(PokeCompleto)
             } if (nome === undefined && treinador === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                     capturado: capturado,
                     [Op.or]: [{tipo1: tipo}, {tipo2: tipo}]
-            }
             })
                 return res.status(200).json(PokeCompleto)
             } if (nome === undefined && capturado === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                     treinador_id: treinador,
-                    [Op.or]: [{tipo1: tipo}, {tipo2: tipo}]}})
+                    [Op.or]: [{tipo1: tipo}, {tipo2: tipo}]})
             return res.status(200).json(PokeCompleto)
             } if (tipo === undefined && capturado === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                     treinador_id: treinador,
-                    nome: nome}})
+                    nome: nome})
             return res.status(200).json(PokeCompleto)
             }  if (nome === undefined && tipo === undefined) {                
-                const PokeCompleto = await database.Pokemons.findAll( {
-                    where: { 
+                const PokeCompleto = await pokemonsServices.buscaGeral( {
                     treinador_id: treinador,
-                    capturado: capturado}})
+                    capturado: capturado})
             return res.status(200).json(PokeCompleto)
             }     
         } catch (error) {
@@ -122,7 +100,7 @@ class PokeController {
     }
     static async todoPoke(req, res) {
         try {
-            const todosOsPoke = await database.Pokemons.findAll()
+            const todosOsPoke = await pokemonsServices.pegaTodosOsRegistros()
             return res.status(200).json(todosOsPoke)
 
         } catch (error) {
@@ -132,7 +110,7 @@ class PokeController {
     static async apagaPoke(req, res) {
         const { id } = req.params
         try {
-            await database.Pokemons.destroy( { where: { id: Number(id) } } )
+            await pokemonsServices.apagaRegisto( {id: Number(id)} )
             return res.status(200).json({ mensagem: `Pókemon de ID ${id} deletado`})
         } catch (error) {
             return res.status(500).json(error.message)
@@ -140,11 +118,10 @@ class PokeController {
     }
     static async atualizaPoke(req, res) {
         const mudaPoke = req.body
-        const { nomePoke } = req.params
+        const { id } = req.params
         try {
-            const atualPoke = await database.Pokemons.update(mudaPoke, { where: {nome: nomePoke}})
+            const atualPoke = await pokemonsServices.atualizaRegistro(mudaPoke, {id: Number(id)})
             return res.status(200).json(atualPoke)
-            // ajustar mensagem de retorno que nao funcionou
         } catch (error) {
             return res.status(500).json(error.message)
         }
