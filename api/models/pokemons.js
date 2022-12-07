@@ -1,7 +1,7 @@
-'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Pokemons extends Model {
     /**
@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Pokemons.belongsTo(models.Treinadores, {
-        foreignKey: 'treinador_id'
-      })
+        foreignKey: 'treinador_id',
+      });
     }
   }
   Pokemons.init({
@@ -23,11 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: 'Colocar Nome ao Pokémon'},
+          msg: 'Colocar Nome ao Pokémon',
+        },
         notEmpty: {
           args: true,
-          msg: 'Colocar Nome ao Pokémon'}
-      }},
+          msg: 'Colocar Nome ao Pokémon',
+        },
+      },
+    },
     tipo1: DataTypes.STRING,
     tipo2: DataTypes.STRING,
     capturado: {
@@ -36,10 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: 'Indicar se o Pokémon foi ou não capturado'
-        }
-      }  
-    }
+          msg: 'Indicar se o Pokémon foi ou não capturado',
+        },
+      },
+    },
   }, {
     sequelize,
     modelName: 'Pokemons',

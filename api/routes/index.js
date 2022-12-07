@@ -1,10 +1,11 @@
-const bodyParser = require('body-parser')
-const pokemons = require('./pokemonsRoute')
-const treinadores = require('./treinadorRoute')
+const bodyParser = require('body-parser');
+const pokemons = require('./pokemonsRoute');
+const treinadores = require('./treinadorRoute');
 
-module.exports = app => {
-    app.use(
-        bodyParser.json(),
-        pokemons,
-        treinadores)
-}
+module.exports = (app) => {
+  app.use(
+    bodyParser.json(),
+    pokemons,
+    treinadores,
+  );
+};

@@ -1,9 +1,9 @@
-'use strict';
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
 
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Treinadores extends Model {
     /**
@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Treinadores.hasMany(models.Pokemons, {
         foreignKey: 'treinador_id',
-        as: 'pokeCapturado'
-      })
+        as: 'pokeCapturado',
+      });
     }
   }
   Treinadores.init({
@@ -26,28 +26,33 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: 'Colocar Nome ao Treinador'},
+          msg: 'Colocar Nome ao Treinador',
+        },
         notEmpty: {
           args: true,
-          msg: 'Colocar Nome ao Treinador'}
-      }},
+          msg: 'Colocar Nome ao Treinador',
+        },
+      },
+    },
     insignias: {
       type: DataTypes.INTEGER,
-      allowNull: false, 
+      allowNull: false,
       validate: {
         notNull: {
           args: true,
-          msg: 'Colocar número de insignias'},
+          msg: 'Colocar número de insignias',
+        },
         notEmpty: {
           args: true,
-          msg: 'Colocar número de insignias'}
-      }
-    }
+          msg: 'Colocar número de insignias',
+        },
+      },
+    },
   }, {
     sequelize,
     paranoid: true,
     scopes: {
-      liga: { where: {insignias: {[Op.gte]: 8}} }
+      liga: { where: { insignias: { [Op.gte]: 8 } } },
     },
     modelName: 'Treinadores',
   });
